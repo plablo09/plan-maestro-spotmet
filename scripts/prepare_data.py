@@ -2,7 +2,7 @@ import geopandas as gpd
 import duckdb
 import os
 
-INPUT_FILE = "data/data.gpkg"
+INPUT_FILE = "data/Cumplimiento normativo.gpkg"
 PARQUET_FILE = "data/data.parquet"
 DB_FILE = "data/compliance.db"
 TABLE_NAME = "buildings"

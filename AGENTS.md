@@ -30,10 +30,20 @@ This project visualizes building compliance data in 3D using a vector tile serve
     *   Interactive popups and legend.
 
 ## Execution
-The server is run in the background using the following method to ensure persistence:
+The server is run in the background using the following method to ensure persistence and prevent the process from terminating when the session ends (a known issue with uvicorn in certain environments):
 ```bash
 nohup ./venv/bin/python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
 ```
+
+### Troubleshooting
+- **Port 8000 in use**: If the server fails to start, check if another process (like Docker) is using the port:
+  ```bash
+  lsof -i :8000
+  ```
+  To clear the port:
+  ```bash
+  lsof -t -i :8000 | xargs kill -9
+  ```
 
 ## Status
 - Fully functional prototype serving dynamic 3D tiles from DuckDB.
