@@ -48,10 +48,10 @@ const map = new maplibregl.Map({
             }
         ]
     },
-    center: [-99.18832, 19.40754], // Center on the data centroid
-    zoom: 16,
-    pitch: 45,
-    bearing: -17
+    center: [-99.17137, 19.40198], // Updated from user screenshot
+    zoom: 13.65,
+    pitch: 56,
+    bearing: 12.8
 });
 
 map.addControl(new maplibregl.NavigationControl());
