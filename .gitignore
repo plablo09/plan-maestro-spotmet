@@ -2,7 +2,6 @@ venv/
 *.log
 __pycache__/
 .DS_Store
-data/*.gpkg
-data/*.parquet
-data/*.db
+data/*
+!data/.gitkeep
 inspect_data.py
