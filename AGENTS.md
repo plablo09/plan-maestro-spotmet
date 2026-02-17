@@ -26,25 +26,26 @@ This project visualizes building compliance data in 3D using a vector tile serve
     *   Dynamic MVT generation using DuckDB's `ST_AsMVT`, `ST_AsMVTGeom`, and `ST_MakeBox2D`.
 5.  **Frontend Implementation**:
     *   MapLibre GL JS interface in `frontend/`.
-    *   `fill-extrusion` layer with `coalesce` handling for null values.
-    *   Interactive popups and legend.
+    *   **Dynamic 3-Step Visualization**: Implemented a state machine to transition between:
+        *   **Paso 1: Zonificación Máxima**: Extrusion by `niv_norm`, colored by neighborhood (`colonia`).
+        *   **Paso 2: Realidad Actual**: Extrusion by `niv_const`, colored by compliance status (`rev_normat`).
+        *   **Paso 3: Potencial Disponible**: Extrusion by the difference (`niv_norm - niv_const`), highlighting overbuilt lots in red.
+    *   **Interactive Controls**: Added a top-left control panel with a dark-gray semi-transparent background (`rgba(45, 45, 45, 0.9)`) and navigation buttons.
+    *   **Cache-Busting**: Implemented asset versioning (e.g., `?v=1.1`) in `index.html` to force browser updates for CSS and JS.
 
 ## Execution
-The server is run in the background using the following method to ensure persistence and prevent the process from terminating when the session ends (a known issue with uvicorn in certain environments):
+The server is run in the background using the following method to ensure persistence:
 ```bash
 nohup ./venv/bin/python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
 ```
 
 ### Troubleshooting
-- **Port 8000 in use**: If the server fails to start, check if another process (like Docker) is using the port:
-  ```bash
-  lsof -i :8000
-  ```
-  To clear the port:
+- **Port 8000 in use**: If the server fails to start, check if another process is using the port:
   ```bash
   lsof -t -i :8000 | xargs kill -9
   ```
 
 ## Status
-- Fully functional prototype serving dynamic 3D tiles from DuckDB.
+- Fully functional prototype with dynamic 3D transitions.
+- Multi-state visualization controlled via a top-left panel.
 - Optimized for performance with pre-projected data.

@@ -1,21 +1,62 @@
 body { margin: 0; padding: 0; }
 #map { position: absolute; top: 0; bottom: 0; width: 100%; }
-.legend {
-    background-color: #fff;
-    border-radius: 3px;
-    bottom: 30px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+.controls {
+    background-color: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    border-radius: 8px;
+    top: 20px;
+    left: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    padding: 10px;
+    padding: 15px;
     position: absolute;
-    right: 10px;
-    z-index: 1;
+    width: 280px;
+    z-index: 1000;
+    pointer-events: auto;
 }
-.legend h4 { margin: 0 0 10px; }
+.control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.step-title {
+    font-weight: bold;
+    font-size: 15px;
+    color: #fff;
+}
+.nav-btn {
+    background-color: #444;
+    border: 1px solid #666;
+    color: #fff;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+.nav-btn:hover {
+    background-color: #666;
+}
+.step-description {
+    font-size: 12px;
+    color: #ccc;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+.legend h4 { 
+    margin: 10px 0 8px; 
+    color: #fff;
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+}
+.legend div { display: flex; align-items: center; margin-bottom: 5px; }
 .legend div span {
-    border-radius: 50%;
+    border-radius: 2px;
     display: inline-block;
-    height: 10px;
-    margin-right: 5px;
-    width: 10px;
+    height: 12px;
+    margin-right: 10px;
+    width: 20px;
+    border: 1px solid rgba(255,255,255,0.2);
 }
+hr { border: 0; border-top: 1px solid #555; margin: 15px 0; }

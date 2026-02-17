@@ -6,17 +6,23 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 <body>
     <div id="map"></div>
-    <div class="legend" id="legend">
-        <h4>Cumplimiento</h4>
-        <div><span style="background-color: #2ecc71"></span>Respeta</div>
-        <div><span style="background-color: #f1c40f"></span>Igual</div>
-        <div><span style="background-color: #e74c3c"></span>Fuera de norma</div>
-        <div><span style="background-color: #95a5a6"></span>Sin información</div>
+    <div class="controls" id="controls">
+        <div class="control-header">
+            <button id="prevStep" class="nav-btn">&larr;</button>
+            <div id="stepTitle" class="step-title">Paso 1: Zonificación Máxima</div>
+            <button id="nextStep" class="nav-btn">&rarr;</button>
+        </div>
+        <div id="stepDescription" class="step-description">Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.</div>
+        <hr>
+        <div class="legend" id="legend">
+            <h4 id="legendTitle">Barrios/Colonias</h4>
+            <div id="legendItems"></div>
+        </div>
     </div>
-    <script src="map.js"></script>
+    <script src="map.js?v=1.1"></script>
 </body>
 </html>
