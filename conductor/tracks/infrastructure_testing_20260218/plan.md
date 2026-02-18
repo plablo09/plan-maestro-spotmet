@@ -18,8 +18,8 @@
 - [ ] Task: Conductor - User Manual Verification 'Core Test Implementation' (Protocol in workflow.md)
 
 ## Phase 3: CI/CD & Workflow Documentation
-- [ ] Task: Create GitHub Actions Workflow File
+- [x] Task: Create GitHub Actions Workflow File
     - [ ] Define `ci.yml` to run backend and frontend tests
-- [ ] Task: Update Project Documentation with GitHub Workflow
+- [x] Task: Update Project Documentation with GitHub Workflow
     - [ ] Add branching and PR guidelines to `README.md` (or a new `CONTRIBUTING.md`)
 - [ ] Task: Conductor - User Manual Verification 'CI/CD & Workflow Documentation' (Protocol in workflow.md)
