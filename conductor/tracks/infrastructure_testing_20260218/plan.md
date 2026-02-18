@@ -1,10 +1,10 @@
 # Implementation Plan: Infrastructure, Testing, and CI
 
 ## Phase 1: Test Environment Setup
-- [~] Task: Configure Python Testing Environment
+- [x] Task: Configure Python Testing Environment
     - [ ] Install `pytest`, `pytest-asyncio`, and `httpx`
     - [ ] Create a sample failing test to verify setup
-- [ ] Task: Configure Frontend Testing Environment
+- [x] Task: Configure Frontend Testing Environment
     - [ ] Initialize `vitest` and `jsdom`
     - [ ] Create a sample failing test for volume formatting
 - [ ] Task: Conductor - User Manual Verification 'Test Environment Setup' (Protocol in workflow.md)
