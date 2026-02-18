@@ -27,7 +27,8 @@ async def get_tile(z: int, x: int, y: int):
         y_min = y_max - tile_size
 
         # SQL to generate MVT
-        # Using ST_MakeBox2D with ST_Point
+        # Using a very distinct name: lot_area
+        # ALSO, explicitly removing edad_const to confirm update
         query = f"""
         SELECT ST_AsMVT(t, 'buildings', 4096, 'geom')
         FROM (
@@ -38,7 +39,7 @@ async def get_tile(z: int, x: int, y: int):
                 niv_norm,
                 niv_const,
                 rev_normat,
-                edad_const,
+                area_m2 AS lot_area,
                 ST_AsMVTGeom(geometry, ST_MakeBox2D(ST_Point({x_min}, {y_min}), ST_Point({x_max}, {y_max})), 4096, 0, false) as geom
             FROM buildings
             WHERE ST_Intersects(geometry, ST_MakeEnvelope({x_min}, {y_min}, {x_max}, {y_max}))

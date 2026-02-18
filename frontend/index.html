@@ -6,7 +6,7 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
-    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="stylesheet" href="style.css?v=1.9">
 </head>
 <body>
     <div id="map"></div>
@@ -17,12 +17,16 @@
             <button id="nextStep" class="nav-btn">&rarr;</button>
         </div>
         <div id="stepDescription" class="step-description">Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.</div>
+        <div class="stats-box">
+            <div id="statsLabel">Volumen Total Permitido:</div>
+            <div id="statsValue">Calculando...</div>
+        </div>
         <hr>
         <div class="legend" id="legend">
             <h4 id="legendTitle">Barrios/Colonias</h4>
             <div id="legendItems"></div>
         </div>
     </div>
-    <script src="map.js?v=1.1"></script>
+    <script src="map.js?v=1.9"></script>
 </body>
 </html>
