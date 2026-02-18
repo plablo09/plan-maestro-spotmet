@@ -15,3 +15,10 @@
 4. Ensure all tests pass locally (`pytest` and `npm test`).
 5. Open a Pull Request (PR) to `main`. CI will automatically run tests.
 6. PRs must be merged using the GitHub CLI or web interface.
+
+### Local Testing with Docker
+To run tests in an environment that mirrors CI, ensure Docker is running and execute:
+```bash
+docker compose -f docker-compose.test.yml run backend-test
+docker compose -f docker-compose.test.yml run frontend-test
+```

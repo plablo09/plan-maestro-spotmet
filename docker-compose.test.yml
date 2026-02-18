@@ -1,0 +1,27 @@
+# Test orchestration
+services:
+  backend-test:
+    image: python:3.11-slim
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+    command: >
+      sh -c "
+      apt-get update && apt-get install -y libsqlite3-dev &&
+      pip install --upgrade pip &&
+      pip install fastapi uvicorn duckdb geopandas pyogrio pyarrow pytest pytest-asyncio httpx &&
+      pytest
+      "
+
+  frontend-test:
+    image: node:20-slim
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+      npm install &&
+      npm test
+      "
