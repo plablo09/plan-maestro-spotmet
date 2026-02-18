@@ -5,7 +5,9 @@ DB_PATH = "data/compliance.db"
 
 @contextmanager
 def get_db_connection():
-    conn = duckdb.connect(DB_PATH, read_only=True)
+    # We remove read_only=True so the connection can create/initialize 
+    # if necessary (useful for CI/Tests)
+    conn = duckdb.connect(DB_PATH)
     conn.execute("INSTALL spatial; LOAD spatial;")
     try:
         yield conn
