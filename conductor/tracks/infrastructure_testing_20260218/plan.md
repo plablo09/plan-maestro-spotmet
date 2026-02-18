@@ -1,7 +1,7 @@
 # Implementation Plan: Infrastructure, Testing, and CI
 
 ## Phase 1: Test Environment Setup
-- [ ] Task: Configure Python Testing Environment
+- [~] Task: Configure Python Testing Environment
     - [ ] Install `pytest`, `pytest-asyncio`, and `httpx`
     - [ ] Create a sample failing test to verify setup
 - [ ] Task: Configure Frontend Testing Environment
