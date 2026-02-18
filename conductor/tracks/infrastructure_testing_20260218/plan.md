@@ -10,10 +10,10 @@
 - [ ] Task: Conductor - User Manual Verification 'Test Environment Setup' (Protocol in workflow.md)
 
 ## Phase 2: Core Test Implementation
-- [ ] Task: Implement Backend Unit & Integration Tests
+- [x] Task: Implement Backend Unit & Integration Tests
     - [ ] Test `get_db_connection` in `db.py`
     - [ ] Test `get_tile` endpoint in `main.py`
-- [ ] Task: Implement Frontend Business Logic Tests
+- [x] Task: Implement Frontend Business Logic Tests
     - [ ] Test `formatVolume` and `calculateStats` logic in `map.js`
 - [ ] Task: Conductor - User Manual Verification 'Core Test Implementation' (Protocol in workflow.md)
 
