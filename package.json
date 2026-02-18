@@ -1,0 +1,28 @@
+{
+  "name": "plan-maestro-spotmet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plablo09/plan-maestro-spotmet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/plablo09/plan-maestro-spotmet/issues"
+  },
+  "homepage": "https://github.com/plablo09/plan-maestro-spotmet#readme",
+  "devDependencies": {
+    "jsdom": "^28.1.0",
+    "vitest": "^4.0.18"
+  }
+}

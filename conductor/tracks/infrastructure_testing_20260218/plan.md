@@ -1,19 +1,19 @@
 # Implementation Plan: Infrastructure, Testing, and CI
 
 ## Phase 1: Test Environment Setup
-- [ ] Task: Configure Python Testing Environment
+- [x] Task: Configure Python Testing Environment
     - [ ] Install `pytest`, `pytest-asyncio`, and `httpx`
     - [ ] Create a sample failing test to verify setup
-- [ ] Task: Configure Frontend Testing Environment
+- [x] Task: Configure Frontend Testing Environment
     - [ ] Initialize `vitest` and `jsdom`
     - [ ] Create a sample failing test for volume formatting
 - [ ] Task: Conductor - User Manual Verification 'Test Environment Setup' (Protocol in workflow.md)
 
 ## Phase 2: Core Test Implementation
-- [ ] Task: Implement Backend Unit & Integration Tests
+- [x] Task: Implement Backend Unit & Integration Tests
     - [ ] Test `get_db_connection` in `db.py`
     - [ ] Test `get_tile` endpoint in `main.py`
-- [ ] Task: Implement Frontend Business Logic Tests
+- [x] Task: Implement Frontend Business Logic Tests
     - [ ] Test `formatVolume` and `calculateStats` logic in `map.js`
 - [ ] Task: Conductor - User Manual Verification 'Core Test Implementation' (Protocol in workflow.md)
 
