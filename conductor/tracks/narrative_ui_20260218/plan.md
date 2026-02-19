@@ -1,7 +1,7 @@
 # Implementation Plan: Refine the Interactive Narrative and Legend UI
 
 ## Phase 1: Narrative Structure & Content
-- [ ] Task: Update Narrative Labels and Descriptions in `map.js`
+- [~] Task: Update Narrative Labels and Descriptions in `map.js`
     - [ ] Define new `steps` array with descriptive titles and policy-focused descriptions
     - [ ] Update `updateMap` function to reflect these changes
 - [ ] Task: Refine Legend and Statistics Labels
