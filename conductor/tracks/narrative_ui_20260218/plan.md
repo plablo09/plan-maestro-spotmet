@@ -16,6 +16,10 @@
     - [ ] Ensure map layers and paint properties are applied reliably on step change
 - [ ] Task: Update Building Popups for Narrative Context
     - [ ] Adjust popup content to highlight the most relevant data for the current active step
+- [x] Task: Implement E2E "Console Guard" Test
+    - [x] Install `@playwright/test`
+    - [x] Create `tests/e2e/smoke.test.js` to detect console errors/warnings
+    - [x] Update `ci.yml` to run E2E tests
 - [ ] Task: Conductor - User Manual Verification 'Logic and Interaction Refinement' (Protocol in workflow.md)
 
 ## Phase 3: Visual Polish & Cleanup

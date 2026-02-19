@@ -1,3 +1,5 @@
+import { formatVolume } from './utils.js';
+
 const map = new maplibregl.Map({
     container: 'map',
     style: {
@@ -128,7 +130,7 @@ const steps = [
             height: ['max', 0, ['*', ['-', ['coalesce', ['get', 'niv_norm'], 0], ['coalesce', ['get', 'niv_const'], 0]], 3]],
             color: [
                 'case',
-                ['>', ['get', 'niv_const'], ['get', 'niv_norm']], '#e74c3c',
+                ['>', ['coalesce', ['get', 'niv_const'], 0], ['coalesce', ['get', 'niv_norm'], 0]], '#e74c3c',
                 '#3498db'
             ]
         }),
