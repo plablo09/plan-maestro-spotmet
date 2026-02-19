@@ -43,8 +43,8 @@ const map = new maplibregl.Map({
 const steps = [
     {
         id: 0,
-        title: 'Paso 1: Zonificación Máxima',
-        description: 'Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.',
+        title: 'Zonificación Máxima',
+        description: 'Lo que la ley permite: Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.',
         legendTitle: 'Barrios/Colonias',
         statsLabel: 'Volumen Total Permitido:',
         getStyle: () => ({
@@ -77,10 +77,10 @@ const steps = [
     },
     {
         id: 1,
-        title: 'Paso 2: Realidad Actual',
-        description: 'Niveles construidos actualmente, coloreados por su estatus de cumplimiento normativo.',
+        title: 'Realidad Registrada',
+        description: 'Lo que dice el Catastro: Niveles construidos según los registros oficiales, coloreados por su cumplimiento normativo.',
         legendTitle: 'Cumplimiento',
-        statsLabel: 'Volumen Total Construido:',
+        statsLabel: 'Volumen Total Registrado:',
         legendItems: [
             { label: 'Respeta la normatividad', color: '#2ecc71' },
             { label: 'Igual a la normatividad', color: '#f1c40f' },
@@ -116,10 +116,10 @@ const steps = [
     },
     {
         id: 2,
-        title: 'Paso 3: Potencial Disponible',
-        description: 'Niveles que aún pueden construirse. Rojo indica predios que ya superaron el límite permitido.',
+        title: 'Brecha de Cumplimiento',
+        description: 'El potencial disponible o excedido: Visualización de la diferencia entre la norma y el registro catastral.',
         legendTitle: 'Disponibilidad',
-        statsLabel: 'Volumen Total Disponible:',
+        statsLabel: 'Volumen de Potencial Disponible:',
         legendItems: [
             { label: 'Capacidad disponible', color: '#3498db' },
             { label: 'Excede normatividad (Sin extrusión)', color: '#e74c3c' }

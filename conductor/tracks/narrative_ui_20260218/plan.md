@@ -4,7 +4,7 @@
 - [~] Task: Update Narrative Labels and Descriptions in `map.js`
     - [ ] Define new `steps` array with descriptive titles and policy-focused descriptions
     - [ ] Update `updateMap` function to reflect these changes
-- [ ] Task: Refine Legend and Statistics Labels
+- [x] Task: Refine Legend and Statistics Labels
     - [ ] Update `statsLabel` for each step to match the narrative
     - [ ] Ensure legend items clearly explain the color mappings for each step
 - [ ] Task: Conductor - User Manual Verification 'Narrative Structure & Content' (Protocol in workflow.md)
