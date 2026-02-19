@@ -26,5 +26,8 @@
     "@playwright/test": "^1.58.2",
     "jsdom": "^28.1.0",
     "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "colorbrewer": "^1.6.1"
   }
 }

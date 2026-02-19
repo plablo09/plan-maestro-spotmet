@@ -1,5 +1,22 @@
 import { formatVolume } from './utils.js';
 
+// Neighborhood color mapping (Paired 12 palette)
+const coloniaPalette = {
+    'Hipódromo': '#a6cee3',
+    'Condesa': '#1f78b4',
+    'Hipódromo Condesa': '#b2df8a',
+    'Buenos Aires': '#33a02c',
+    'Roma Norte': '#fb9a99',
+    'Roma Sur': '#e31a1c',
+    'Escandón I Sección': '#fdbf6f',
+    'Escandón II Sección': '#ff7f00',
+    'San Miguel Chapultepec I Sección': '#cab2d6',
+    'San Miguel Chapultepec II Sección': '#6a3d9a',
+    'Doctores': '#ffff99',
+    'Juárez': '#b15928',
+    'Otras': '#ccc'
+};
+
 const map = new maplibregl.Map({
     container: 'map',
     style: {
@@ -49,17 +66,37 @@ const steps = [
         description: 'Lo que la ley permite: Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.',
         legendTitle: 'Barrios/Colonias',
         statsLabel: 'Volumen Total Permitido:',
+        legendItems: [
+            { label: 'Hipódromo', color: coloniaPalette['Hipódromo'] },
+            { label: 'Condesa', color: coloniaPalette['Condesa'] },
+            { label: 'Hipódromo Condesa', color: coloniaPalette['Hipódromo Condesa'] },
+            { label: 'Buenos Aires', color: coloniaPalette['Buenos Aires'] },
+            { label: 'Roma Norte', color: coloniaPalette['Roma Norte'] },
+            { label: 'Roma Sur', color: coloniaPalette['Roma Sur'] },
+            { label: 'Escandón I', color: coloniaPalette['Escandón I Sección'] },
+            { label: 'Escandón II', color: coloniaPalette['Escandón II Sección'] },
+            { label: 'S.M. Chapultepec I', color: coloniaPalette['San Miguel Chapultepec I Sección'] },
+            { label: 'S.M. Chapultepec II', color: coloniaPalette['San Miguel Chapultepec II Sección'] },
+            { label: 'Otras', color: coloniaPalette['Otras'] }
+        ],
         getStyle: () => ({
             height: ['*', ['coalesce', ['get', 'niv_norm'], 0], 3],
             color: [
                 'match',
                 ['get', 'colonia'],
-                'Hipódromo', '#1abc9c', 'Condesa', '#3498db', 'Hipódromo Condesa', '#9b59b6',
-                'Buenos Aires', '#f1c40f', 'San Miguel Chapultepec II Sección', '#e67e22',
-                'Escandón II Sección', '#e74c3c', 'Escandón I Sección', '#ecf0f1',
-                'Doctores', '#95a5a6', 'Roma Norte', '#2c3e50', 'Juárez', '#d35400',
-                'San Miguel Chapultepec I Sección', '#7f8c8d', 'Roma Sur', '#16a085',
-                '#ccc'
+                'Hipódromo', coloniaPalette['Hipódromo'],
+                'Condesa', coloniaPalette['Condesa'],
+                'Hipódromo Condesa', coloniaPalette['Hipódromo Condesa'],
+                'Buenos Aires', coloniaPalette['Buenos Aires'],
+                'Roma Norte', coloniaPalette['Roma Norte'],
+                'Roma Sur', coloniaPalette['Roma Sur'],
+                'Escandón I Sección', coloniaPalette['Escandón I Sección'],
+                'Escandón II Sección', coloniaPalette['Escandón II Sección'],
+                'San Miguel Chapultepec I Sección', coloniaPalette['San Miguel Chapultepec I Sección'],
+                'San Miguel Chapultepec II Sección', coloniaPalette['San Miguel Chapultepec II Sección'],
+                'Doctores', coloniaPalette['Doctores'],
+                'Juárez', coloniaPalette['Juárez'],
+                coloniaPalette['Otras']
             ]
         }),
         calculateStats: (features) => {
@@ -173,6 +210,8 @@ function updateStats() {
 }
 
 function updateMap() {
+    if (!map.isStyleLoaded()) return;
+
     const step = steps[currentStepIndex];
     const style = step.getStyle();
 
@@ -192,11 +231,9 @@ function updateMap() {
             div.innerHTML = `<span style="background-color: ${item.color}"></span>${item.label}`;
             legendItemsDiv.appendChild(div);
         });
-    } else if (currentStepIndex === 0) {
-        legendItemsDiv.innerHTML = '<div>Colores por colonia principal.</div>';
     }
     
-    setTimeout(updateStats, 500); 
+    updateStats();
 }
 
 map.on('load', () => {
@@ -222,19 +259,28 @@ map.on('click', 'buildings-extrusion', (e) => {
     const norm = props.niv_norm || 0;
     const constr = props.niv_const || 0;
     const diff = norm - constr;
-    const diffText = diff > 0 ? `${diff.toFixed(1)} niveles disponibles` : (diff < 0 ? `${Math.abs(diff).toFixed(1)} niveles excedidos` : 'Sin diferencia');
+    
+    let comparisonLine = '';
+    if (currentStepIndex === 0) {
+        comparisonLine = `<strong>Niveles Permitidos:</strong> ${norm}`;
+    } else if (currentStepIndex === 1) {
+        comparisonLine = `<strong>Niveles Registrados:</strong> ${constr}<br><strong>Estatus:</strong> ${props.rev_normat}`;
+    } else {
+        const diffText = diff > 0 ? `${diff.toFixed(1)} niveles disponibles` : (diff < 0 ? `${Math.abs(diff).toFixed(1)} niveles excedidos` : 'Cumplimiento exacto');
+        comparisonLine = `<strong>Brecha:</strong> ${diffText}<br><strong>Norma:</strong> ${norm} vs <strong>Realidad:</strong> ${constr}`;
+    }
 
     new maplibregl.Popup()
         .setLngLat(e.lngLat)
         .setHTML(`
-            <strong>Cuenta Catastral:</strong> ${props.cta_catast}<br>
-            <strong>Colonia:</strong> ${props.colonia}<br>
-            <strong>Zonificación:</strong> ${props.zonif}<br>
-            <strong>Area:</strong> ${props.lot_area ? Math.round(props.lot_area) : 'N/A'} m²<br>
-            <strong>Niveles Permitidos:</strong> ${norm}<br>
-            <strong>Niveles Construidos:</strong> ${constr}<br>
-            <strong>Diferencia:</strong> ${diffText}<br>
-            <strong>Estatus:</strong> ${props.rev_normat}
+            <div class="popup-content">
+                <div class="popup-header">${props.colonia}</div>
+                <strong>Cuenta:</strong> ${props.cta_catast}<br>
+                <strong>Zonificación:</strong> ${props.zonif}<br>
+                <strong>Área:</strong> ${props.lot_area ? Math.round(props.lot_area) : 'N/A'} m²<br>
+                <hr>
+                ${comparisonLine}
+            </div>
         `)
         .addTo(map);
 });
