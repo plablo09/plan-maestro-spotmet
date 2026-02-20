@@ -1,7 +1,7 @@
 # Implementation Plan: Explorer Mode & Layer Toggling
 
 ## Phase 1: Mode Toggle & UI Scaffold
-- [ ] Task: Implement Mode Toggle in Control Panel
+- [~] Task: Implement Mode Toggle in Control Panel
     - [ ] Add toggle buttons to `index.html`
     - [ ] Update `style.css` for mode-specific UI visibility
 - [ ] Task: Create Explorer Control Panel
