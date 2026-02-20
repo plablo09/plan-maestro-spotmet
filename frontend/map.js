@@ -62,8 +62,8 @@ const map = new maplibregl.Map({
 const steps = [
     {
         id: 0,
-        title: 'Zonificación Máxima',
-        description: 'Lo que la ley permite: Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.',
+        title: 'Normatividad Base',
+        description: 'Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.',
         legendTitle: 'Barrios/Colonias',
         statsLabel: 'Volumen Total Permitido:',
         legendItems: [
