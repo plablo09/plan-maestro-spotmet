@@ -9,7 +9,7 @@ export default defineConfig({
     headless: true,
   },
   webServer: {
-    command: `PYTHONPATH=. ${pythonCmd} -m uvicorn backend.main:app --host 0.0.0.0 --port 8000`,
+    command: `PYTHONPATH=. ${pythonCmd} scripts/init_test_db.py && PYTHONPATH=. ${pythonCmd} -m uvicorn backend.main:app --host 0.0.0.0 --port 8000`,
     url: 'http://localhost:8000',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
