@@ -4,7 +4,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Explorer Mode & Layer Toggling**
+- [ ] **Track: Documentation & Containerization**
+  *Link: [./tracks/docs_docker_20260219/](./tracks/docs_docker_20260219/)*
+
+- [x] **Track: Explorer Mode & Layer Toggling**
   *Link: [./tracks/explorer_mode_20260219/](./tracks/explorer_mode_20260219/)*
 
 - [x] **Track: Infrastructure, Testing, and CI**
