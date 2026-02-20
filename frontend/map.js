@@ -24,9 +24,9 @@ const map = new maplibregl.Map({
         sources: {
             'osm': {
                 type: 'raster',
-                tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],
                 tileSize: 256,
-                attribution: '&copy; OpenStreetMap contributors'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             },
             'buildings-source': {
                 type: 'vector',
@@ -48,13 +48,13 @@ const map = new maplibregl.Map({
                 'source-layer': 'buildings',
                 paint: {
                     'fill-extrusion-base': 0,
-                    'fill-extrusion-opacity': 0.8
+                    'fill-extrusion-opacity': 0.7
                 }
             }
         ]
     },
     center: [-99.17137, 19.40198],
-    zoom: 13.65,
+    zoom: 14.75,
     pitch: 56,
     bearing: 12.8
 });
@@ -191,42 +191,197 @@ const steps = [
 ];
 
 let currentStepIndex = 0;
+let appMode = 'narrative'; // 'narrative' or 'explorer'
+
+function updateModeUI() {
+    const isNarrative = appMode === 'narrative';
+    
+    // Update buttons
+    document.getElementById('btnNarrative').classList.toggle('active', isNarrative);
+    document.getElementById('btnExplorer').classList.toggle('active', !isNarrative);
+    
+    // Update content panels
+    document.getElementById('narrativeControls').classList.toggle('active', isNarrative);
+    document.getElementById('explorerControls').classList.toggle('active', !isNarrative);
+    
+    updateMap();
+}
+
+function setRadioValue(name, value) {
+    const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (radio) radio.checked = true;
+}
+
+function getRadioValue(name) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    return checked ? checked.value : null;
+}
+
+document.getElementById('btnNarrative').addEventListener('click', () => {
+    appMode = 'narrative';
+    updateModeUI();
+});
+
+document.getElementById('btnExplorer').addEventListener('click', () => {
+    // Sync radios with current step state before switching
+    if (appMode === 'narrative') {
+        if (currentStepIndex === 0) {
+            setRadioValue('height', 'normativa');
+            setRadioValue('color', 'barrios');
+        } else if (currentStepIndex === 1) {
+            setRadioValue('height', 'registro');
+            setRadioValue('color', 'cumplimiento');
+        } else {
+            setRadioValue('height', 'brecha');
+            setRadioValue('color', 'disponibilidad');
+        }
+    }
+    appMode = 'explorer';
+    updateModeUI();
+});
+
+document.getElementById('groupHeight').addEventListener('change', updateMap);
+document.getElementById('groupColor').addEventListener('change', updateMap);
 
 function updateStats() {
     if (!map.isStyleLoaded()) return;
     
-    const step = steps[currentStepIndex];
-    const features = map.queryRenderedFeatures({ layers: ['buildings-extrusion'] });
+    let totalVolume = 0;
+    let label = "";
     
-    const totalVolume = step.calculateStats(features);
-    
-    if (features.length > 0) {
-        console.log('Sample properties:', features[0].properties);
+    if (appMode === 'narrative') {
+        const step = steps[currentStepIndex];
+        const features = map.queryRenderedFeatures({ layers: ['buildings-extrusion'] });
+        totalVolume = step.calculateStats(features);
+        label = step.statsLabel;
+    } else {
+        const heightType = getRadioValue('height');
+        const features = map.queryRenderedFeatures({ layers: ['buildings-extrusion'] });
+        
+        const seen = new Set();
+        features.forEach(f => {
+            const id = f.properties.cta_catast;
+            if (id && !seen.has(id)) {
+                const area = parseFloat(f.properties.lot_area) || 0;
+                let val = 0;
+                if (heightType === 'normativa') val = parseFloat(f.properties.niv_norm) || 0;
+                else if (heightType === 'registro') val = parseFloat(f.properties.niv_const) || 0;
+                else if (heightType === 'brecha') {
+                    const diff = (parseFloat(f.properties.niv_norm) || 0) - (parseFloat(f.properties.niv_const) || 0);
+                    val = Math.max(0, diff);
+                }
+                totalVolume += area * val * 3;
+                seen.add(id);
+            }
+        });
+        
+        const heightLabels = {
+            'none': 'Área total (Plano):',
+            'normativa': 'Volumen Total Permitido:',
+            'registro': 'Volumen Total Registrado:',
+            'brecha': 'Volumen de Potencial Disponible:'
+        };
+        label = heightLabels[heightType];
     }
-    console.log(`Stats Update - Features: ${features.length}, Volume: ${totalVolume}`);
     
-    document.getElementById('statsLabel').innerText = step.statsLabel;
+    document.getElementById('statsLabel').innerText = label;
     document.getElementById('statsValue').innerText = formatVolume(totalVolume);
 }
 
 function updateMap() {
     if (!map.isStyleLoaded()) return;
 
-    const step = steps[currentStepIndex];
-    const style = step.getStyle();
+    let heightStyle, colorStyle, title, description, legendTitle, legendItems;
 
-    map.setPaintProperty('buildings-extrusion', 'fill-extrusion-height', style.height);
-    map.setPaintProperty('buildings-extrusion', 'fill-extrusion-color', style.color);
+    if (appMode === 'narrative') {
+        const step = steps[currentStepIndex];
+        const style = step.getStyle();
+        heightStyle = style.height;
+        colorStyle = style.color;
+        title = step.title;
+        description = step.description;
+        legendTitle = step.legendTitle;
+        legendItems = step.legendItems;
+    } else {
+        const heightType = getRadioValue('height');
+        const colorType = getRadioValue('color');
 
-    document.getElementById('stepTitle').innerText = step.title;
-    document.getElementById('stepDescription').innerText = step.description;
-    document.getElementById('legendTitle').innerText = step.legendTitle;
+        // Heights
+        if (heightType === 'none') heightStyle = 0;
+        else if (heightType === 'normativa') heightStyle = ['*', ['coalesce', ['get', 'niv_norm'], 0], 3];
+        else if (heightType === 'registro') heightStyle = ['*', ['coalesce', ['get', 'niv_const'], 0], 3];
+        else if (heightType === 'brecha') heightStyle = ['max', 0, ['*', ['-', ['coalesce', ['get', 'niv_norm'], 0], ['coalesce', ['get', 'niv_const'], 0]], 3]];
 
+        // Colors
+        if (colorType === 'barrios') {
+            colorStyle = [
+                'match', ['get', 'colonia'],
+                'Hipódromo', coloniaPalette['Hipódromo'],
+                'Condesa', coloniaPalette['Condesa'],
+                'Hipódromo Condesa', coloniaPalette['Hipódromo Condesa'],
+                'Buenos Aires', coloniaPalette['Buenos Aires'],
+                'Roma Norte', coloniaPalette['Roma Norte'],
+                'Roma Sur', coloniaPalette['Roma Sur'],
+                'Escandón I Sección', coloniaPalette['Escandón I Sección'],
+                'Escandón II Sección', coloniaPalette['Escandón II Sección'],
+                'San Miguel Chapultepec I Sección', coloniaPalette['San Miguel Chapultepec I Sección'],
+                'San Miguel Chapultepec II Sección', coloniaPalette['San Miguel Chapultepec II Sección'],
+                'Doctores', coloniaPalette['Doctores'],
+                'Juárez', coloniaPalette['Juárez'],
+                coloniaPalette['Otras']
+            ];
+            legendTitle = 'Barrios/Colonias';
+            legendItems = [
+                { label: 'Hipódromo', color: coloniaPalette['Hipódromo'] },
+                { label: 'Condesa', color: coloniaPalette['Condesa'] },
+                { label: 'Roma', color: coloniaPalette['Roma Norte'] },
+                { label: 'Escandón', color: coloniaPalette['Escandón II Sección'] },
+                { label: 'S.M. Chapultepec', color: coloniaPalette['San Miguel Chapultepec II Sección'] },
+                { label: 'Otras', color: coloniaPalette['Otras'] }
+            ];
+        } else if (colorType === 'cumplimiento') {
+            colorStyle = [
+                'match', ['get', 'rev_normat'],
+                'respeta la normatividad', '#2ecc71',
+                'igual a la normatividad', '#f1c40f',
+                'fuera de la normatividad', '#e74c3c',
+                'sin información normativa', '#95a5a6',
+                '#ccc'
+            ];
+            legendTitle = 'Cumplimiento';
+            legendItems = [
+                { label: 'Respeta', color: '#2ecc71' },
+                { label: 'Igual', color: '#f1c40f' },
+                { label: 'Fuera', color: '#e74c3c' },
+                { label: 'S/I', color: '#95a5a6' }
+            ];
+        } else {
+            colorStyle = [
+                'case',
+                ['>', ['coalesce', ['get', 'niv_const'], 0], ['coalesce', ['get', 'niv_norm'], 0]], '#e74c3c',
+                '#3498db'
+            ];
+            legendTitle = 'Disponibilidad';
+            legendItems = [
+                { label: 'Disponible', color: '#3498db' },
+                { label: 'Excede', color: '#e74c3c' }
+            ];
+        }
+    }
+
+    map.setPaintProperty('buildings-extrusion', 'fill-extrusion-height', heightStyle);
+    map.setPaintProperty('buildings-extrusion', 'fill-extrusion-color', colorStyle);
+
+    if (appMode === 'narrative') {
+        document.getElementById('stepTitle').innerText = title;
+        document.getElementById('stepDescription').innerText = description;
+    }
+    
+    document.getElementById('legendTitle').innerText = legendTitle;
     const legendItemsDiv = document.getElementById('legendItems');
     legendItemsDiv.innerHTML = '';
-    
-    if (step.legendItems) {
-        step.legendItems.forEach(item => {
+    if (legendItems) {
+        legendItems.forEach(item => {
             const div = document.createElement('div');
             div.innerHTML = `<span style="background-color: ${item.color}"></span>${item.label}`;
             legendItemsDiv.appendChild(div);
@@ -235,6 +390,14 @@ function updateMap() {
     
     updateStats();
 }
+
+document.getElementById('btnCloseIntro').addEventListener('click', () => {
+    document.getElementById('introOverlay').classList.add('hidden');
+});
+
+document.getElementById('btnHelp').addEventListener('click', () => {
+    document.getElementById('introOverlay').classList.remove('hidden');
+});
 
 map.on('load', () => {
     updateMap();

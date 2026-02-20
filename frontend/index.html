@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Spotmet Compliance 3D</title>
+    <title>Alturas y zonificación en el polígono del Bando 1</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
@@ -10,13 +10,64 @@
 </head>
 <body>
     <div id="map"></div>
-    <div class="controls" id="controls">
-        <div class="control-header">
-            <button id="prevStep" class="nav-btn">&larr;</button>
-            <div id="stepTitle" class="step-title">Normatividad Base</div>
-            <button id="nextStep" class="nav-btn">&rarr;</button>
+
+    <div id="introOverlay" class="intro-overlay">
+        <div class="intro-card">
+            <h2>Alturas y zonificación en el polígono del Bando 1</h2>
+            <p>Esta herramienta visualiza la relación entre la normativa urbana, los registros catastrales y la realidad construida en la Ciudad de México.</p>
+            <div class="intro-sections">
+                <div class="intro-section">
+                    <strong>Modo Narrativo</strong>
+                    <p>Una guía paso a paso para entender la brecha entre lo permitido y lo registrado.</p>
+                </div>
+                <div class="intro-section">
+                    <strong>Modo Explorador</strong>
+                    <p>Herramientas independientes para analizar capas de altura y color a tu voluntad.</p>
+                </div>
+            </div>
+            <button id="btnCloseIntro" class="primary-btn">Comenzar Exploración</button>
         </div>
-        <div id="stepDescription" class="step-description">Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.</div>
+    </div>
+
+    <button id="btnHelp" class="help-btn" title="Ayuda">?</button>
+
+    <div class="controls" id="controls">
+        <div class="mode-selector">
+            <button id="btnNarrative" class="mode-btn active">Narrativo</button>
+            <button id="btnExplorer" class="mode-btn">Explorador</button>
+        </div>
+        
+        <hr>
+
+        <div id="narrativeControls" class="mode-content active">
+            <div class="control-header">
+                <button id="prevStep" class="nav-btn">&larr;</button>
+                <div id="stepTitle" class="step-title">Normatividad Base</div>
+                <button id="nextStep" class="nav-btn">&rarr;</button>
+            </div>
+            <div id="stepDescription" class="step-description">Muestra el máximo de niveles permitidos por la normativa vigente para cada predio.</div>
+        </div>
+
+        <div id="explorerControls" class="mode-content">
+            <div class="explorer-field">
+                <label>Extrusión (Altura)</label>
+                <div class="radio-group" id="groupHeight">
+                    <input type="radio" name="height" value="none" id="hNone"><label for="hNone">Ninguna</label>
+                    <input type="radio" name="height" value="normativa" id="hNorm" checked><label for="hNorm">Norma</label>
+                    <input type="radio" name="height" value="registro" id="hReg"><label for="hReg">Registro</label>
+                    <input type="radio" name="height" value="brecha" id="hBrecha"><label for="hBrecha">Brecha</label>
+                </div>
+            </div>
+            <div class="explorer-field">
+                <label>Color (Capa)</label>
+                <div class="radio-group" id="groupColor">
+                    <input type="radio" name="color" value="barrios" id="cBarrios" checked><label for="cBarrios">Barrios</label>
+                    <input type="radio" name="color" value="cumplimiento" id="cCumpl"><label for="cCumpl">Estatus</label>
+                    <input type="radio" name="color" value="disponibilidad" id="cDisp"><label for="cDisp">Potencial</label>
+                </div>
+            </div>
+        </div>
+
         <div class="stats-box">
             <div id="statsLabel">Volumen Total Permitido:</div>
             <div id="statsValue">Calculando...</div>
