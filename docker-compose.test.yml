@@ -25,3 +25,21 @@ services:
       npm install &&
       npm test
       "
+
+  e2e-test:
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+      - CI=true
+    command: >
+      sh -c "
+      apt-get update && apt-get install -y python3.11 python3-pip libsqlite3-dev libgdal-dev g++ &&
+      pip install -r backend/requirements.txt &&
+      pip install pytest pytest-asyncio httpx &&
+      npm install &&
+      npx playwright install chromium &&
+      npm run test:e2e
+      "
