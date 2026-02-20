@@ -8,3 +8,4 @@ pyarrow
 pytest
 pytest-asyncio
 httpx
+gunicorn
