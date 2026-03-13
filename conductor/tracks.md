@@ -15,3 +15,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Refine the Interactive Narrative and Legend UI**
   *Link: [./tracks/narrative_ui_20260218/](./tracks/narrative_ui_20260218/)*
+
+- [ ] **Track: Deployment Automation & CI/CD**
+  *Link: [./tracks/deployment_automation_20260312/](./tracks/deployment_automation_20260312/)*
