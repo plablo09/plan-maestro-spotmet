@@ -1,0 +1,7 @@
+{
+  "id": "deployment_automation_20260312",
+  "name": "Deployment Automation & CI/CD",
+  "description": "Sets up a centralized Caddy reverse proxy on Ubuntu and a GitHub Actions workflow for automated deployment to GHCR and the remote server.",
+  "created_at": "2026-03-12",
+  "status": "IN_PROGRESS"
+}
