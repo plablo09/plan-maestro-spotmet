@@ -1,13 +1,18 @@
 FROM python:3.11-slim
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \n    libsqlite3-dev \n    libgdal-dev \n    g++ \n    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    libsqlite3-dev \
+    libgdal-dev \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 # Install Python dependencies
 COPY backend/requirements.txt . 
-RUN pip install --no-cache-dir --upgrade pip && \n    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
 COPY . .
